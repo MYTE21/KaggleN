@@ -22,7 +22,7 @@ def get_title_with_icon(text: str, icon_path: str, width: int = 40, offset_px: i
     st.markdown(
         f"""
         <h1>
-            <img src="data:image/png;base64,{icon_url}" 
+            <img src="data:image/png;base64,{icon_url}"
                 width="{width}"
                 style="vertical-align:middle; position:relative; top:{offset_px}px;"/>
             {text}
