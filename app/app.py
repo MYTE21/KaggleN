@@ -13,6 +13,7 @@ st.set_page_config(
     page_icon=LOGO_PATH
 )
 
+st.logo(LOGO_PATH, size="large")
 
 # Title Section.
 get_title_with_icon("NoteTea", LOGO_PATH)
