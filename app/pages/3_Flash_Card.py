@@ -10,6 +10,12 @@ LOGO_PATH = os.path.abspath(os.path.join(BASE_DIR, "../../assets/icon.png"))
 
 st.logo(LOGO_PATH, size="large")
 
+
+st.set_page_config(
+    page_title="Flash Card",
+    page_icon=LOGO_PATH
+)
+
 st.title("🏞 Flash Card")
 st.write("🎉 Welcome to NoteTea.")
 
@@ -26,10 +32,10 @@ FLASHCARDS = [
 # --- App Initialization ---
 
 # Set the page title and a simple layout
-st.set_page_config(page_title="Simple Flashcards", layout="centered")
+# st.set_page_config(page_title="Simple Flashcards", layout="centered")
 
-st.title("Simple Streamlit Flashcards 📇")
-st.write("A basic app to demonstrate flashcard logic in Streamlit.")
+# st.title("Simple Streamlit Flashcards 📇")
+# st.write("A basic app to demonstrate flashcard logic in Streamlit.")
 
 # Initialize session state variables if they don't exist
 # 'card_index' tracks which card we are on

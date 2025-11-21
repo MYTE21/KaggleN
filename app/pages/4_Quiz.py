@@ -10,5 +10,11 @@ LOGO_PATH = os.path.abspath(os.path.join(BASE_DIR, "../../assets/icon.png"))
 
 st.logo(LOGO_PATH, size="large")
 
+
+st.set_page_config(
+    page_title="Quiz",
+    page_icon=LOGO_PATH
+)
+
 st.title("🤔 Quiz")
 st.write("🎉 Welcome to NoteTea.")
