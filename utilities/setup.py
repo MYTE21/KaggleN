@@ -1,14 +1,28 @@
 import os
+import uuid
 from dotenv import load_dotenv
 from IPython.display import Markdown
 
 # Google ADK & GenAI Imports.
-from google.adk.agents import Agent
-from google.adk.models.google_llm import Gemini
-from google.adk.runners import InMemoryRunner
-from google.adk.tools import google_search
-
 from google.genai import types
+from google.adk.agents import Agent, LlmAgent
+from google.adk.models.google_llm import Gemini
+from google.adk.runners import Runner, InMemoryRunner
+from google.adk.sessions import InMemorySessionService
+
+
+from google.adk.tools import google_search
+from google.adk.tools.mcp_tool.mcp_toolset import McpToolset
+from google.adk.tools.tool_context import ToolContext
+from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
+from mcp import StdioServerParameters
+
+from google.adk.apps.app import App, ResumabilityConfig
+from google.adk.tools.function_tool import FunctionTool
+
+
+# Load environment variables.
+load_dotenv()
 
 
 def get_google_api_key(use_vertexai: bool = True) -> str | None:
@@ -30,8 +44,6 @@ def get_google_api_key(use_vertexai: bool = True) -> str | None:
     Returns:
         str | None: The loaded Google API Key if successful, or None if the key is missing from the environment.
     """
-    load_dotenv()
-
     google_api_key = os.getenv("GOOGLE_API_KEY")
 
     if not google_api_key:
@@ -47,6 +59,21 @@ def get_google_api_key(use_vertexai: bool = True) -> str | None:
 
         print("✅ Gemini API key setup complete.")
         return google_api_key
+    except Exception as e:
+        print(f"⚠️ Error setting environment variables: {e}")
+
+
+def get_kaggle_credentials() -> str | None:
+    kaggle_api_key = os.getenv("KAGGLE_API_KEY")
+
+    if not kaggle_api_key:
+        print("⚠️ Authentication Error: 'KAGGLE_API_KEY' environment variable is missing.")
+        return None
+
+    try:
+        os.environ["KAGGLE_API_KEY"] = kaggle_api_key
+        print("✅ Kaggle API key setup complete.")
+        return kaggle_api_key
     except Exception as e:
         print(f"⚠️ Error setting environment variables: {e}")
 
