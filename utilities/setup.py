@@ -78,6 +78,21 @@ def get_kaggle_credentials() -> str | None:
         print(f"⚠️ Error setting environment variables: {e}")
 
 
+def get_notion_credentials() -> str | None:
+    notion_api_key = os.getenv("NOTION_API_KEY")
+
+    if not notion_api_key:
+        print("⚠️ Authentication Error: 'NOTION_API_KEY' environment variable is missing.")
+        return None
+
+    try:
+        os.environ["NOTION_API_KEY"] = notion_api_key
+        print("✅ Notion API key setup complete.")
+        return notion_api_key
+    except Exception as e:
+        print(f"⚠️ Error setting environment variables: {e}")
+
+
 def get_retry_config() -> types.HttpRetryOptions:
     """
     Creates a retry configuration for the Google Gen AI Client.
