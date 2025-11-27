@@ -58,6 +58,7 @@ async def run_session(runner_instance: Runner, user_queries: list[str] | str = N
                     parts_len = len(event.content.parts)
                     print(f"🦊 Event Content Part Length: {len(event.content.parts)}")
                     print(f"🎉 Event Content: {event.content}")
+                    print(f"🔥 🔥 🔥 Event: {event}")
                     for i in range(parts_len):
                         chunk_text = event.content.parts[i].text
                         print(f"🐣 Chunk Text: {chunk_text}")
