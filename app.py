@@ -1,13 +1,12 @@
 import os
-import asyncio  # Import asyncio
-import nest_asyncio  # Import nest_asyncio
+import asyncio
+import nest_asyncio
 import streamlit as st
-from components import title, chat
+from components import title
 from scripts import session_agent
 from utilities import streamed_response as sr
 
-# -- FIX: Apply the asyncio patch --
-# This allows the event loop to be reused across Streamlit reruns
+# Apply the asyncio patch: This allows the event loop to be reused across Streamlit reruns.
 nest_asyncio.apply()
 
 # -- Setup --
@@ -44,17 +43,16 @@ if prompt := st.chat_input("Ask me anything..."):
         full_response = ""
 
         try:
-            # OPTIONAL: Explicitly create a new loop if one doesn't exist
             try:
                 loop = asyncio.get_event_loop()
             except RuntimeError:
                 loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(loop)
 
-            # Run the agent
+            # Run the agent.
             response_obj = session_agent.run_chat_agent(prompt, session_name="test")
 
-            # Handle response (String vs Generator)
+            # Handle response (String vs Generator).
             if hasattr(response_obj, "__iter__") and not isinstance(response_obj, str):
                 for chunk in response_obj:
                     full_response += chunk
