@@ -1,7 +1,7 @@
 import os
 import streamlit as st
 from components import title, chat
-import asyncio
+from scripts import session_agent
 
 
 # -- Setup --
@@ -32,14 +32,17 @@ for message in st.session_state.messages:
 
 # React to user input.
 if prompt := st.chat_input("Ask me anything..."):
+    st.session_state.messages.append({"role": "user", "content": prompt})
 
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    st.session_state.messages.append({"role": "user", "content": prompt})
-
     with st.chat_message("assistant"):
-        # response = st.write_stream(chat.random_response())
-        response = st.write(asyncio.run(chat.gemini_agent(prompt)))
+        response = session_agent.run_chat_agent(prompt, session_name="test")
+        st.write(response)
 
     st.session_state.messages.append({"role": "assistant", "content": response})
+
+
+if __name__ == "__main__":
+    pass

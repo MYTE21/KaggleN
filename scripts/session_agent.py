@@ -2,19 +2,15 @@
 # General Imports.
 import os
 from dotenv import load_dotenv
-from typing import Any, Dict
 import asyncio
 
 # Google ADK & GenAI Imports.
-from google.adk.agents import Agent, LlmAgent
-from google.adk.apps.app import App, EventsCompactionConfig
+from google.adk.agents import LlmAgent
 from google.adk.models.google_llm import Gemini
 from google.adk.sessions import DatabaseSessionService
-from google.adk.sessions import InMemorySessionService
 from google.adk.runners import Runner
-from google.adk.tools.tool_context import ToolContext
 from google.genai import types
-from streamlit import session_state
+from google.adk.tools import google_search
 
 # -- Setup --
 load_dotenv()
@@ -35,8 +31,6 @@ retry_config = types.HttpRetryOptions(
 
 # -- Helper Function --
 async def run_session(runner_instance: Runner, user_queries: list[str] | str = None, session_name: str = "default",):
-    print(f"\n ### Session: {session_name}")
-
     app_name = runner_instance.app_name
 
     try:
@@ -53,8 +47,6 @@ async def run_session(runner_instance: Runner, user_queries: list[str] | str = N
             user_queries = [user_queries]
 
         for query in user_queries:
-            print(f"\nUser > {query}")
-
             query = types.Content(role="user", parts=[types.Part(text=query)])
 
             async for event in runner_instance.run_async(
@@ -65,9 +57,11 @@ async def run_session(runner_instance: Runner, user_queries: list[str] | str = N
                         event.content.parts[0].text != "None"
                         and event.content.parts[0].text
                     ):
-                        print(f"{MODEL_NAME} > ", event.content.parts[0].text)
+                        return event.content.parts[0].text
+        return None
+
     else:
-        print("No queries!")
+        return None
 
 
 # -- Agent Setup --
@@ -76,6 +70,7 @@ root_agent =LlmAgent(
     model=Gemini(model=MODEL_NAME, retry_options=retry_config),
     name="kagglen_agent",
     description="A text chatbot",
+    tools=[google_search]
 )
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -96,15 +91,17 @@ runner = Runner(
 )
 
 
-def run_chat_agent(message: str):
-    asyncio.run(
+def run_chat_agent(message: str, session_name: str):
+    response = asyncio.run(
         run_session(
             runner,
             [message],
-            "session-1",
+            session_name,
         )
     )
 
+    return response
+
 
 if __name__ == "__main__":
-    run_chat_agent("What did I ask you about earlier?")
+    print(run_chat_agent("What is Kaggle?", "q"))
