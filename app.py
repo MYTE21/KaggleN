@@ -1,5 +1,6 @@
 import os
 import asyncio
+import json
 import nest_asyncio
 import streamlit as st
 from components import title
@@ -11,22 +12,43 @@ nest_asyncio.apply()
 
 # -- Setup --
 LOGO_PATH = os.path.join(os.getcwd(), "assets/icon.png")
+HISTORY_PATH = os.path.join(os.getcwd(), "data/history.json")
 
 st.set_page_config(
     page_title="KaggleN",
     page_icon=LOGO_PATH
 )
 
+# -- History --
+def load_chat_history():
+    if os.path.exists(HISTORY_PATH):
+        try:
+            with open(HISTORY_PATH, "r") as f:
+                return json.load(f)
+        except:
+            return []
+    return []
+
+def save_chat_history(messages):
+    with open(HISTORY_PATH, "w") as f:
+        json.dump(messages, f)
+
+
 # -- Title --
 with st.sidebar:
     title.get_title_with_icon("KaggleN", LOGO_PATH)
     st.badge("Partner of your Kaggle journey.", icon=":material/star:", color="violet")
 
+    if st.button("Clear Chat History", type="primary"):
+        st.session_state.messages = []
+        save_chat_history([])
+        st.rerun()
+
 title.get_title_with_icon("Chat", LOGO_PATH)
 
 # -- AI Agent --
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state.messages = load_chat_history()
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
@@ -34,6 +56,8 @@ for message in st.session_state.messages:
 
 if prompt := st.chat_input("Ask me anything..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
+
+    save_chat_history(st.session_state.messages)
 
     with st.chat_message("user"):
         st.markdown(prompt)
@@ -70,6 +94,8 @@ if prompt := st.chat_input("Ask me anything..."):
             full_response = "I encountered an error processing your request."
 
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+
+    save_chat_history(st.session_state.messages)
 
 if __name__ == "__main__":
     pass
