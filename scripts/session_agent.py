@@ -96,17 +96,15 @@ runner = Runner(
 )
 
 
-
-if __name__ == "__main__":
+def run_chat_agent(message: str):
     asyncio.run(
         run_session(
             runner,
-            [
-                "Hi, I'm Evon! What is the capital of Bangladesh?",
-                "Hello! What is my name?",
-                # "What did I ask you about earlier?",
-                # "And remind me, what's my name?"
-            ],
+            [message],
             "session-1",
         )
     )
+
+
+if __name__ == "__main__":
+    run_chat_agent("What did I ask you about earlier?")
