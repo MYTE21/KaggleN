@@ -16,7 +16,7 @@ from google.adk.tools import google_search
 load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
-APP_NAME = "default"
+APP_NAME = "agents"
 USER_ID = "default"
 SESSION = "default"
 
@@ -46,6 +46,8 @@ async def run_session(runner_instance: Runner, user_queries: list[str] | str = N
         if type(user_queries) == str:
             user_queries = [user_queries]
 
+        response_accumulator = []
+
         for query in user_queries:
             query = types.Content(role="user", parts=[types.Part(text=query)])
 
@@ -53,12 +55,19 @@ async def run_session(runner_instance: Runner, user_queries: list[str] | str = N
                 user_id=USER_ID, session_id=session.id, new_message=query
             ):
                 if event.content and event.content.parts:
-                    if (
-                        event.content.parts[0].text != "None"
-                        and event.content.parts[0].text
-                    ):
-                        return event.content.parts[0].text
-        return None
+                    parts_len = len(event.content.parts)
+                    print(f"🦊 Event Content Part Length: {len(event.content.parts)}")
+                    print(f"🎉 Event Content: {event.content}")
+                    for i in range(parts_len):
+                        chunk_text = event.content.parts[i].text
+                        print(f"🐣 Chunk Text: {chunk_text}")
+                        if (
+                            event.content.parts[0].text != "None"
+                            and event.content.parts[0].text
+                        ):
+                            response_accumulator.append(chunk_text)
+
+        return "".join(response_accumulator)
 
     else:
         return None
@@ -104,4 +113,4 @@ def run_chat_agent(message: str, session_name: str):
 
 
 if __name__ == "__main__":
-    print(run_chat_agent("What is Kaggle?", "q"))
+    print(run_chat_agent("Generate a sample Python code.", "q"))

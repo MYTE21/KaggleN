@@ -4,6 +4,7 @@ import nest_asyncio  # Import nest_asyncio
 import streamlit as st
 from components import title, chat
 from scripts import session_agent
+from utilities import streamed_response as sr
 
 # -- FIX: Apply the asyncio patch --
 # This allows the event loop to be reused across Streamlit reruns
@@ -56,12 +57,15 @@ if prompt := st.chat_input("Ask me anything..."):
             # Handle response (String vs Generator)
             if hasattr(response_obj, "__iter__") and not isinstance(response_obj, str):
                 for chunk in response_obj:
-                    full_response += str(chunk)
-                    message_placeholder.markdown(full_response + "▌")
-                message_placeholder.markdown(full_response)
+                    full_response += chunk
+                    if full_response.count("```") % 2 == 0:
+                        message_placeholder.markdown(full_response + "▌")  # Add cursor
+                    else:
+                        message_placeholder.markdown(full_response)
+                message_placeholder = st.write_stream(sr.response_generator(full_response))
             else:
                 full_response = str(response_obj)
-                message_placeholder.markdown(full_response)
+                message_placeholder = st.write_stream(sr.response_generator(full_response))
 
         except Exception as e:
             st.error(f"Error: {e}")
