@@ -12,7 +12,7 @@ nest_asyncio.apply()
 
 # -- Setup --
 LOGO_PATH = os.path.join(os.getcwd(), "assets/icon.png")
-HISTORY_PATH = os.path.join(os.getcwd(), "data/history.json")
+HISTORY_PATH = os.path.join(os.getcwd(), "sessions/history.json")
 
 st.set_page_config(
     page_title="KaggleN",
