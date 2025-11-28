@@ -1,0 +1,30 @@
+from agents.concrete import SearchAgent, KaggleAgen, NotionAgent
+
+
+class AgentFactory:
+    """
+    Returns the specific agent class requested.
+    """
+    _registry = {
+        "search": SearchAgent,
+        "kaggle": KaggleAgen,
+        "notion": NotionAgent
+    }
+
+    @staticmethod
+    def get_agent(agent_name: str):
+        agent_class = AgentFactory._registry.get(agent_name.lower())
+        if not agent_class:
+            raise ValueError(f"Agent '{agent_name}' is not supported. Available: {list(AgentFactory._registry.keys())}")
+
+        return agent_class()
+
+    @staticmethod
+    def run_dynamic_agent(agent_name: str, message: str, session_id: str):
+        try:
+            agent = AgentFactory.get_agent(agent_name)
+            resource = agent.run(message, session_id)
+            return resource
+        except Exception as e:
+            return f"Error: {e}"
+
