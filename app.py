@@ -4,7 +4,6 @@ import json
 import nest_asyncio
 import streamlit as st
 from components import title
-from agents import search_agent
 from utilities import streamed_response as sr
 
 # Apply the asyncio patch: This allows the event loop to be reused across Streamlit reruns.
@@ -74,7 +73,11 @@ if prompt := st.chat_input("Ask me anything..."):
                 asyncio.set_event_loop(loop)
 
             # Run the agent.
-            response_obj = search_agent.run_chat_agent(prompt, session_name="test")
+            # response_obj = search_agent.run_chat_agent(prompt, session_name="test")
+            from agents.factory import AgentFactory
+            agent = AgentFactory()
+            response_obj = agent.run_dynamic_agent("search", prompt, "test")
+
 
             # Handle response (String vs Generator).
             if hasattr(response_obj, "__iter__") and not isinstance(response_obj, str):

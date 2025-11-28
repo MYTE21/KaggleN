@@ -19,10 +19,9 @@ class AgentFactory:
 
         return agent_class()
 
-    @staticmethod
-    def run_dynamic_agent(agent_name: str, message: str, session_id: str):
+    def run_dynamic_agent(self, agent_name: str, message: str, session_id: str):
         try:
-            agent = AgentFactory.get_agent(agent_name)
+            agent = self.get_agent(agent_name)
             resource = agent.run(message, session_id)
             return resource
         except Exception as e:
