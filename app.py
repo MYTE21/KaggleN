@@ -46,6 +46,7 @@ def main():
         # Agent step.
         with st.chat_message("assistant"):
             message_placeholder = st.empty()
+            message_placeholder.markdown("Thinking... ⏳")
             full_response = ""
 
             try:
