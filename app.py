@@ -4,7 +4,7 @@ import json
 import nest_asyncio
 import streamlit as st
 from components import title
-from scripts import session_agent
+from agents import session_agent
 from utilities import streamed_response as sr
 
 # Apply the asyncio patch: This allows the event loop to be reused across Streamlit reruns.

@@ -88,8 +88,6 @@ DATA_FOLDER = os.path.join(BASE_DIR, "../data")
 os.makedirs(DATA_FOLDER, exist_ok=True)
 DB_PATH = os.path.join(DATA_FOLDER, "my_agent_data.db")
 
-# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# DB_PATH = os.path.join(BASE_DIR, "my_agent_data.db")
 db_url = f"sqlite+aiosqlite:///{DB_PATH}"
 
 session_service = DatabaseSessionService(db_url=db_url)
