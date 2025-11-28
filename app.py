@@ -5,6 +5,7 @@ import streamlit as st
 from config import LOGO_PATH
 from components import title
 from components.sidebar import render_sidebar
+from components.welcome import render_welcome_screen
 from modules.display import handle_response_display
 from modules.history import HistoryManager
 from modules.runner import get_agent_response
@@ -24,16 +25,20 @@ def main():
     selected_agent = render_sidebar()
 
     # Title.
-    title.get_title_with_icon("Chat", LOGO_PATH)
+    # title.get_title_with_icon("Chat", LOGO_PATH)
 
     # Load history.
     if "messages" not in st.session_state:
         st.session_state.messages = HistoryManager.load()
 
     # Display chat.
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+    if len(st.session_state.messages) == 0:
+        render_welcome_screen()
+    else:
+        title.get_title_with_icon("KaggleN", LOGO_PATH)
+        for message in st.session_state.messages:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
 
     # Input loop.
     if prompt := st.chat_input("Ask me anything..."):
@@ -60,6 +65,7 @@ def main():
         # Save step.
         st.session_state.messages.append({"role": "assistant", "content": full_response})
         HistoryManager.save(st.session_state.messages)
+        st.rerun()
 
 
 if __name__ == "__main__":
