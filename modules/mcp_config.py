@@ -7,7 +7,7 @@ from mcp import StdioServerParameters
 
 load_dotenv()
 KAGGLE_API_KEY = os.getenv("KAGGLE_API_KEY")
-
+NOTION_API_KEY = os.getenv("NOTION_API_KEY")
 
 
 tools = [
@@ -80,3 +80,22 @@ def get_kaggle_mcp_tool():
     )
 
     return kaggle_tool
+
+def get_notion_mcp_tool():
+    notion_tool = McpToolset(
+        connection_params=StdioConnectionParams(
+            server_params=StdioServerParameters(
+                command="npx",
+                args=[
+                    "-y",
+                    "@notionhq/notion-mcp-server"
+                ],
+                env={
+                    "NOTION_TOKEN": NOTION_API_KEY,
+                }
+            ),
+            timeout=60
+        )
+    )
+
+    return notion_tool

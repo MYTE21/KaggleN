@@ -5,7 +5,7 @@ from google.adk.models.google_llm import Gemini
 from google.adk.tools import google_search
 
 from agents.base import BaseAgent
-from modules.mcp_config import get_kaggle_mcp_tool
+from modules.mcp_config import get_kaggle_mcp_tool, get_notion_mcp_tool
 from config import KAGGLE_USERNAME
 
 from dotenv import load_dotenv
@@ -85,9 +85,11 @@ class NotionAgent(BaseAgent):
         super().__init__()
 
     def _define_agent(self) -> LlmAgent:
+        notion_tool = get_notion_mcp_tool()
+
         return LlmAgent(
             model=Gemini(model=self.model_name, retry_options=self.retry_config),
             name="notion_agent",
             description="A productivity assistant managing Notion pages.",
-            tools=[]
+            tools=[notion_tool]
         )

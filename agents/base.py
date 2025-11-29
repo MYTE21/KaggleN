@@ -95,12 +95,14 @@ class BaseAgent(ABC):
         ):
             if event.content and event.content.parts:
                 for part in event.content.parts:
-                    chunk_text = part.text
-                    response_accumulator.append(chunk_text)
-                    yield chunk_text
+                    if part.text:
+                        chunk_text = part.text
+                        response_accumulator.append(chunk_text)
+                        yield chunk_text
 
     def run(self, message: str, session_id: str):
         accumulated_text = ""
+        print(f"⚠️ ⚠️ ⚠️ : {message}")
 
         async def _execute():
             nonlocal accumulated_text
@@ -114,8 +116,13 @@ class BaseAgent(ABC):
                 loop.run_until_complete(_execute())
             else:
                 asyncio.run(_execute())
-        except:
-            asyncio.run(_execute())
+        except RuntimeError as e:
+            if "There is no current event loop" in str(e):
+                asyncio.run(_execute())
+            else:
+                raise e
+
+        print(f"🔥 🔥 🔥 : {accumulated_text}")
 
         return accumulated_text
 

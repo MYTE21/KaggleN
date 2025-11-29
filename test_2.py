@@ -35,8 +35,8 @@ mcp_kaggle_server = McpToolset(
                 'mcp-remote',
                 'https://www.kaggle.com/mcp',
                 "--header",
-                f"Authorization: Bearer {k_key}"            ],
-            # 2. FIX: Add 'authorize' to the allowed tools
+                f"Authorization: Bearer {k_key}"
+            ],
             tool_filter=mcp_config.tools
         ),
         timeout=30,
@@ -85,4 +85,5 @@ print("✅ Runner created.")
 # response = asyncio.run(runner.run_debug("""How many Kaggle notebooks have I created? List them.  """, verbose=True))
 # response = asyncio.run(runner.run_debug("""I have provided the user name and key in the instruction. Can you tell me how many kaggle notebooks have i created. and how many are private and public?""", verbose=True))
 # response = asyncio.run(runner.run_debug(""" me details about the notebook: "MYTE 21 Pandas Practice". Link: https://www.kaggle.com/code/machinelearning557/myte-21-pandas-practice""", verbose=True))
-response = asyncio.run(runner.run_debug("""Can you talk about this user: machinelearning557""", verbose=True))
+# response = asyncio.run(runner.run_debug("""Can you talk about this user: machinelearning557""", verbose=True))
+response = asyncio.run(runner.run_debug("""Can you tell me the user names of the top in the leaderboard of "AI Mathematical Olympiad - Progress Prize 3" competition?""", verbose=True))
