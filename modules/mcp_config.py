@@ -4,13 +4,12 @@ from google.adk.tools.mcp_tool.mcp_toolset import McpToolset
 from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
 from mcp import StdioServerParameters
 
-
 load_dotenv()
 KAGGLE_API_KEY = os.getenv("KAGGLE_API_KEY")
 NOTION_API_KEY = os.getenv("NOTION_API_KEY")
 
 
-tools = [
+kaggle_tools = [
     "get_competition_data_files_summary",
     "get_competition_leaderboard",
     "update_dataset_metadata",
@@ -57,9 +56,52 @@ tools = [
     "search_datasets",
     "list_notebook_session_output",
     "upload_dataset_file",
-    "list_dataset_tree_files"
+    "list_dataset_tree_files",
 ]
 
+# notion_tools = [
+#     "API-get-user",
+#     "API-get-users",
+#     "API-get-self",
+#     "API-post-database-query",
+#     "API-post-search",
+#     "API-get-block-children",
+#     "API-patch-block-children",
+#     "API-retrieve-a-block",
+#     "API-update-a-block",
+#     "API-delete-a-block",
+#     "API-retrieve-a-page",
+#     "API-patch-page",
+#     "API-post-page",
+#     "API-create-a-database",
+#     "API-update-a-database",
+#     "API-retrieve-a-database",
+#     "API-retrieve-a-page-property",
+#     "API-retrieve-a-comment",
+#     "API-create-a-comment",
+# ]
+
+notion_tools = [
+    "notion-get-user",
+    "notion-get-users",
+    "notion-get-self",
+    "notion-post-database-query",
+    "notion-post-search",
+    "notion-get-block-children",
+    "notion-patch-block-children",
+    "notion-retrieve-a-block",
+    "notion-update-a-block",
+    "notion-delete-a-block",
+    "notion-retrieve-a-page",
+    "notion-patch-page",
+    "notion-post-page",
+    "notion-create-a-database",
+    "notion-update-a-database",
+    "notion-retrieve-a-database",
+    "notion-retrieve-a-page-property",
+    "notion-retrieve-a-comment",
+    "notion-create-a-comment",
+]
 
 def get_kaggle_mcp_tool():
     kaggle_tool = McpToolset(
@@ -73,28 +115,28 @@ def get_kaggle_mcp_tool():
                     "--header",
                     f"Authorization: Bearer {KAGGLE_API_KEY}",
                 ],
-                tool_filter = tools
+                tool_filter=kaggle_tools,
             ),
-            timeout=30,
+            timeout=60,
         )
     )
 
     return kaggle_tool
+
 
 def get_notion_mcp_tool():
     notion_tool = McpToolset(
         connection_params=StdioConnectionParams(
             server_params=StdioServerParameters(
                 command="npx",
-                args=[
-                    "-y",
-                    "@notionhq/notion-mcp-server"
-                ],
+                args=["-y", "@notionhq/notion-mcp-server"],
+                # args=["-y", "mcp-remote", "https://mcp.notion.com/mcp"],
                 env={
                     "NOTION_TOKEN": NOTION_API_KEY,
-                }
+                },
+                tool_filter=notion_tools
             ),
-            timeout=60
+            timeout=60,
         )
     )
 

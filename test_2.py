@@ -37,7 +37,7 @@ mcp_kaggle_server = McpToolset(
                 "--header",
                 f"Authorization: Bearer {k_key}"
             ],
-            tool_filter=mcp_config.tools
+            tool_filter=mcp_config.kaggle_tools
         ),
         timeout=30,
     )
