@@ -24,3 +24,4 @@ DB_URL = f"sqlite+aiosqlite:///{DB_PATH}"
 APP_TITLE = "KaggleN"
 APP_ICON = LOGO_PATH
 MODEL_NAME = "gemini-2.5-flash-lite"
+KAGGLE_USERNAME = "machinelearning557"
