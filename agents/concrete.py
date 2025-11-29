@@ -18,7 +18,7 @@ class SearchAgent(BaseAgent):
         )
 
 
-class KaggleAgen(BaseAgent):
+class KaggleAgent(BaseAgent):
     def __init__(self):
         super().__init__()
 

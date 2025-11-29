@@ -1,4 +1,4 @@
-from agents.concrete import SearchAgent, KaggleAgen, NotionAgent
+from agents.concrete import SearchAgent, KaggleAgent, NotionAgent
 
 
 class AgentFactory:
@@ -7,7 +7,7 @@ class AgentFactory:
     """
     _registry = {
         "search": SearchAgent,
-        "kaggle": KaggleAgen,
+        "kaggle": KaggleAgent,
         "notion": NotionAgent
     }
 
