@@ -91,5 +91,22 @@ class NotionAgent(BaseAgent):
             model=Gemini(model=self.model_name, retry_options=self.retry_config),
             name="notion_agent",
             description="A productivity assistant managing Notion pages.",
+            instruction=(
+        "You are a Notion assistant. "
+        "CRITICAL INSTRUCTIONS FOR READING CONTENT: "
+        "1. To read a page, use the tool 'API-get-block-children'. "
+        "2. The tool input argument is 'block_id' (pass the page_id here). "
+        "3. **DATA EXTRACTION RULE**: The output is a JSON list of blocks. "
+        "   Text is hidden deep inside. You must iterate through 'results', "
+        "   check fields like 'paragraph', 'heading_1', 'bulleted_list_item', etc., "
+        "   and extract the 'plain_text' from within the 'rich_text' array. "
+        "   Do not say the page is empty just because you see JSON wrappers. Dig for the 'plain_text'."
+        "4. If 'API-post-search' returns nothing, ask the user to 'Connect' the page to the integration."
+        "5. When summarizing, focus on key points and avoid unnecessary details."
+        "6. Always format your final summary in clear, concise sentences."
+        "CRITICAL INSTRUCTIONS FOR WRITING CONTENT: "
+        "1. To add a new paragraph block to a page, use the tool 'API-patch-block-children'. "
+        "2. The tool input argument is a JSON object with '"
+    ),
             tools=[notion_tool]
         )
